@@ -8,7 +8,8 @@ class RenderManager :
 {
 public:
 	void Render();
-	RenderSource* AddSource(std::unique_ptr<RenderSource> src, unsigned short layer);
+	CreateSource( unsigned short layer);
+	
 protected:
 private:
 	std::array< std::vector< std::unique_ptr<RenderSource> >, 64> layers;
