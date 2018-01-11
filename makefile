@@ -1,16 +1,16 @@
 OBJNAMES=main.o Game.o Ball.o Scene/SceneManager.o ScaledDeltaTimer.o Vector2.o
-OBJDIR=build/obj
+OBJDIR=./build/obj
 OBJS=$(addprefix $(OBJDIR)/,$(OBJNAMES))
 OBJPATHNAMES=$(strip $(subst .,,$(patsubst %/,%,$(dir $(OBJNAMES)))))
 OBJPATHS=$(addprefix $(OBJDIR)/,$(OBJPATHNAMES))
 
-$SRCDIR=src
+SRC=src
 
 CXX=g++
 INCL=include/SDL2
 LIB=lib
-LDFLAGS=-g
-LDLIBS=-lmingw32 -lSDL2main -lSDL2  -lSDL2_image -lSDL2_ttf
+LDFLAGS=
+LDLIBS=-lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 CXXFLAGS=-Wall -O0 -g -std=c++14 -m64 -mwindows -MMD -MP
 
 RM=rmdir /Q /S
@@ -20,9 +20,9 @@ OUT=bin/main.exe
 
 all : $(OUT)
 
-.SUFFIXES:
+.PHONY: clean all
 
-$(OBJDIR)/%.o : $(SRCDIR)/%.cpp | $(OBJPATHS)
+$(OBJDIR)/%.o : $(SRC)/%.cpp | $(OBJPATHS)
 	$(CXX) $< -c $(CXXFLAGS) -I$(INCL) -o $@
 
 $(OUT) : $(OBJS)
@@ -31,7 +31,7 @@ $(OUT) : $(OBJS)
 $(OBJPATHS):
 	$(MKDIR) "$@"
 	
-.PHONY clean :
+clean :
 	$(RM) "$(OBJDIR)"
 	
 -include $(OBJS:.o=.d)
