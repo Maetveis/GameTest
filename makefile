@@ -11,7 +11,7 @@ INCL=include/SDL2
 LIB=lib
 LDFLAGS=
 LDLIBS=-lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
-CXXFLAGS=-Wall -O0 -g -std=c++14 -m64 -mwindows -MMD -MP
+CXXFLAGS=-Wall -O0 -g -std=c++14 -m64 -MMD -MP
 
 RM=rmdir /Q /S
 MKDIR=mkdir
