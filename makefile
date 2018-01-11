@@ -32,6 +32,6 @@ $(OBJPATHS):
 	$(MKDIR) "$@"
 	
 .PHONY clean :
-	$(RM) $(OBJDIR)
+	$(RM) "$(OBJDIR)"
 	
 -include $(OBJS:.o=.d)
