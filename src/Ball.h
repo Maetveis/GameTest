@@ -1,5 +1,5 @@
 #include "Main/Vector2.h"
-#include "Render/Sprite.h"
+#include "Render/SpriteLoader.h"
 
 #include <SDL.h>
 
@@ -15,5 +15,9 @@ public:
 private:
 	SDL_Rect rect = {0, 0, 100, 100};
 	Vector2 pos = Vector2(0, 0);
-	Sprite sprite;
+	SpriteLoader loader;
+	SpriteHandle handle;
+	SpriteHandle handlex;
+	SpriteHandle handley;
+	SpriteHandle handles;
 };

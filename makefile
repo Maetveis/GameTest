@@ -1,37 +1,42 @@
-OBJNAMES=Main/main.o Main/Game.o Ball.o Scene/SceneManager.o Main/ScaledDeltaTimer.o Main/Vector2.o Render/Sprite.o Main/GameComponent.o
-OBJDIR=./build/obj
-OBJS=$(addprefix $(OBJDIR)/,$(OBJNAMES))
-OBJPATHNAMES=$(strip $(subst .,,$(patsubst %/,%,$(dir $(OBJNAMES)))))
-OBJPATHS=$(addprefix $(OBJDIR)/,$(OBJPATHNAMES))
-
-SRC=src
-
 CXX=g++
+CXXFLAGS=-Wall -O0 -g -std=c++14 -m64 -MMD -MP
+SRCDIR=src
+OBJDIR=build/obj
 INCL=include/SDL2
-LIB=lib
+LIBDIR=lib
 LDFLAGS=
 LDLIBS=-lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
-CXXFLAGS=-Wall -O0 -g -std=c++14 -m64 -MMD -MP
 
-RM=rmdir /Q /S
-MKDIR=mkdir
+RM=rm
+RMDIR=rm -r
+MKDIR=mkdir -p
 
 OUT=bin/main.exe
 
+SRCS=Main/main.cpp Main/Game.cpp Main/Vector2.cpp Main/ScaledDeltaTimer.cpp Main/GameComponent.cpp \
+	Scene/SceneManager.cpp Main/ScaledDeltaTimer.cpp \
+	Render/Sprite.cpp Render/SpriteHandle.cpp Render/SpriteLoader.cpp \
+	Ball.cpp
+
+OBJNAMES := $(SRCS:.cpp=.o)
+OBJS := $(addprefix $(OBJDIR)/,$(OBJNAMES))
+BUILD_DIRS := $(patsubst %/,%,$(sort $(dir $(OBJS))))
+
 all : $(OUT)
 
-.PHONY: clean all
+.PHONY: clean all dirtree
 
-$(OBJDIR)/%.o : $(SRC)/%.cpp | $(OBJPATHS)
+$(OBJDIR)/%.o : $(SRCDIR)/%.cpp | $(BUILD_DIRS)
 	$(CXX) $< -c $(CXXFLAGS) -I$(INCL) -o $@
 
 $(OUT) : $(OBJS)
-	$(CXX) $(OBJS) $(LDFLAGS) -L$(LIB) $(LDLIBS) -o $(OUT)
+	$(CXX) $^ $(LDFLAGS) -L$(LIBDIR) $(LDLIBS) -o $(OUT)
 	
-$(OBJPATHS):
-	$(MKDIR) "$@"
+$(BUILD_DIRS):
+	$(MKDIR) $@
 	
 clean :
-	$(RM) "$(OBJDIR)"
+	$(RM) "$(OUT)"
+	$(RMDIR) "$(OBJDIR)"
 	
 -include $(OBJS:.o=.d)

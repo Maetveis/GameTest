@@ -8,11 +8,12 @@ class Sprite
 {
 public:
 	~Sprite();
+	Sprite();
 	explicit Sprite(SDL_Renderer* renderer, const char* filename);
 	explicit Sprite(SDL_Texture* texture);
 	explicit Sprite(SDL_Renderer* renderer, SDL_Surface* surface);
 	
-	Sprite();
+	Sprite(Sprite&& rhs);
 	Sprite(const Sprite&) = delete;
 	Sprite& operator=(const Sprite&) = delete;
 	
@@ -30,7 +31,7 @@ public:
 		const SDL_RendererFlip flip = SDL_FLIP_NONE
 	) const;
 	
-	bool IsLoaded();
+	bool IsLoaded() const;
 	
 	void Clear();
 protected:

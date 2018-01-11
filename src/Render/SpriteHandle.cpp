@@ -1,26 +1,38 @@
+#include "SpriteHandle.h"
+
+#include "Sprite.h"
+
 SpriteHandle::SpriteHandle(
 	Sprite* s,
-	const unsigned x,
-	const unsigned y,
-	const unsigned w,
-	const unsigned h,
-	const unsigned x1,
-	const unsigned y1,
-	const unsigned w1,
-	const unsigned h1
+	const int x,
+	const int y,
+	const int w,
+	const int h,
+	const int x1,
+	const int y1,
+	const int w1,
+	const int h1,
+	const bool e
 ) :
 	sprite(s),
-	srcRect(x, y, w, h),
-	destRect(x1, y1, w1, h1),
 	angle(0),
-	center((x + w) / 2, (y + h) / 2),
-	flip(SDL_FLIP_NONE)
+	flip(SDL_FLIP_NONE),
+	enabled(e)
+{
+	center = {(x + w) / 2, (y + h) / 2};
+	srcRect = {x, y, w, h};
+	destRect = {x1, y1, w1, h1};
+}
+
+SpriteHandle::SpriteHandle(Sprite* s) :
+	sprite(s),
+	enabled(false)
 {
 }
 
-void SpriteHandle::Render(SDL_Renderer* renderer) const
+void SpriteHandle::Render(SDL_Renderer* renderer)
 {
-	sprite->DrawRotated(renderer, &srcRect, &destRect, angle, center, flip);
+	sprite->DrawRotated(renderer, &srcRect, &destRect, angle, &center, flip);
 }
 
 void SpriteHandle::SetSprite(Sprite* s)
@@ -28,7 +40,7 @@ void SpriteHandle::SetSprite(Sprite* s)
 	sprite = s;
 }
 
-void SpriteHandle::GrowSourceRect(const int x, const int y, const int w = 0, const int h = 0)
+void SpriteHandle::GrowSourceRect(const int x, const int y, const int w, const int h)
 {
 	srcRect.x += x;
 	srcRect.y += y;
@@ -36,7 +48,7 @@ void SpriteHandle::GrowSourceRect(const int x, const int y, const int w = 0, con
 	srcRect.h += h;
 }
 
-void SpriteHandle::GrowDestRect(const int x, const int y, const int w = 0, const int h = 0)
+void SpriteHandle::GrowDestRect(const int x, const int y, const int w, const int h)
 {
 	destRect.x += x;
 	destRect.y += y;
@@ -44,7 +56,7 @@ void SpriteHandle::GrowDestRect(const int x, const int y, const int w = 0, const
 	destRect.h += h;
 }
 
-void SpriteHandle::SetSourceRect(const unsigned x, const unsigned y, const unsigned w, const unsigned h)
+void SpriteHandle::SetSourceRect(const int x, const int y, const int w, const int h)
 {
 	srcRect.x = x;
 	srcRect.y = y;
@@ -52,7 +64,7 @@ void SpriteHandle::SetSourceRect(const unsigned x, const unsigned y, const unsig
 	srcRect.h = h;
 }
 
-void SpriteHandle::SetDestRect(const unsigned x, const unsigned y, const unsigned w, const unsigned h)
+void SpriteHandle::SetDestRect(const int x, const int y, const int w, const int h)
 {
 	destRect.x = x;
 	destRect.y = y;
@@ -60,13 +72,13 @@ void SpriteHandle::SetDestRect(const unsigned x, const unsigned y, const unsigne
 	destRect.h = h;
 }
 
-void SpriteHandle::SetRotaionCenter(const unsigned x, const unsigned y)
+void SpriteHandle::SetRotaionCenter(const int x, const int y)
 {
 	center.x = x;
 	center.y = y;
 }
 
-void SpriteHandle::SetRotaion(const double a)
+void SpriteHandle::SetRotation(const double a)
 {
 	angle = a;
 }
@@ -75,28 +87,38 @@ void SpriteHandle::SetVerticalFlip(const bool f)
 {
 	if(f)
 	{
-		flip = flip | SDL_FLIP_VERTICAL;
+		flip = static_cast<SDL_RendererFlip>(flip | SDL_FLIP_VERTICAL);
 	} else {
-		flip = flip & ~SDL_FLIP_VERTICAL
+		flip = static_cast<SDL_RendererFlip>(flip & ~SDL_FLIP_VERTICAL);
 	}
 }
 
-void SpriteHandle::SetHorizontalFlip(const bool flip)
+void SpriteHandle::SetHorizontalFlip(const bool f)
 {
 	if(f)
 	{
-		flip = flip | SDL_FLIP_HORIZONTAL;
+		flip = static_cast<SDL_RendererFlip>(flip | SDL_FLIP_HORIZONTAL);
 	} else {
-		flip = flip & ~SDL_FLIP_HORIZONTAL;
+		flip = static_cast<SDL_RendererFlip>(flip & ~SDL_FLIP_HORIZONTAL);
 	}
 }
 
 void SpriteHandle::FlipHorizontal()
 {
-	flip = flip ^ SDL_FLIP_HORIZONTAL;
+	flip = static_cast<SDL_RendererFlip>(flip ^ SDL_FLIP_HORIZONTAL);
 }
 
 void SpriteHandle::FlipVertical()
 {
-	flip = flip ^ SDL_FLIP_VERTICAL;
+	flip = static_cast<SDL_RendererFlip>(flip ^ SDL_FLIP_VERTICAL);
+}
+
+bool SpriteHandle::IsEnabled() const
+{
+	return enabled;
+}
+
+void SpriteHandle::SetEnabled(const bool e)
+{
+	enabled = e;
 }
