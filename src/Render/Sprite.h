@@ -12,7 +12,7 @@ public:
 	explicit Sprite(SDL_Texture* texture);
 	explicit Sprite(SDL_Renderer* renderer, SDL_Surface* surface);
 	
-	Sprite() = default;
+	Sprite();
 	Sprite(const Sprite&) = delete;
 	Sprite& operator=(const Sprite&) = delete;
 	
@@ -29,6 +29,10 @@ public:
 		const SDL_Point* center,
 		const SDL_RendererFlip flip = SDL_FLIP_NONE
 	) const;
+	
+	bool IsLoaded();
+	
+	void Clear();
 protected:
 private:
 	SDL_Texture* texture;
