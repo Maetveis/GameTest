@@ -1,4 +1,4 @@
-OBJNAMES=main.o Game.o Ball.o Scene/SceneManager.o ScaledDeltaTimer.o Vector2.o
+OBJNAMES=Main/main.o Main/Game.o Ball.o Scene/SceneManager.o Main/ScaledDeltaTimer.o Main/Vector2.o Render/Sprite.o Main/GameComponent.o
 OBJDIR=./build/obj
 OBJS=$(addprefix $(OBJDIR)/,$(OBJNAMES))
 OBJPATHNAMES=$(strip $(subst .,,$(patsubst %/,%,$(dir $(OBJNAMES)))))

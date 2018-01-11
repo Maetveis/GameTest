@@ -2,6 +2,11 @@
 
 #include <SDL.h>
 
+void Ball::Init(SDL_Renderer* renderer)
+{
+	sprite.FromFile(renderer, "img/ball.png");
+}
+
 void Ball::Update(const double deltaTime)
 {
 	pos += speed * deltaTime;
@@ -34,6 +39,6 @@ void Ball::Update(const double deltaTime)
 void Ball::Render(SDL_Renderer* renderer)
 {
 	SDL_Rect rect = {static_cast<int>(pos.x), static_cast<int>(pos.y), 20, 20};
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-	SDL_RenderFillRect(renderer, &rect);
+	SDL_Rect rect2 = {0, 0, 20, 20};
+	sprite.Draw(renderer, &rect2, &rect);
 }

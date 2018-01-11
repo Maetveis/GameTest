@@ -6,7 +6,8 @@
 
 #include "Scene.h"
 
-class SceneManager
+class SceneManager :
+	public GameComponent
 {
 public:
 	void PushScene(std::unique_ptr<Scene> ptr);

@@ -1,7 +1,6 @@
 #include "Game.h"
 
-#include "Scene/SceneManager.h"
-#include "BallScene.h"
+#include "../BallScene.h"
 
 #include <SDL.h>
 
@@ -28,17 +27,26 @@ void Game::Run()
 
 void Game::Init()
 {
+	//Initializing SDL
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-	mainWindow = SDL_CreateWindow("swefnjsndfa", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
+	
+	//Spawning window and renderer
+	mainWindow = SDL_CreateWindow("GameTest", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
+	
 	renderer = SDL_CreateRenderer(mainWindow, 0, SDL_RENDERER_ACCELERATED);
+	
+	//Starting main Scene
+	sceneManager.AttachGame(this);
 	sceneManager.ChangeScene(std::unique_ptr<Scene>(new BallScene));
 	
+	//Starting delta timer
 	timer.SetScaleFactor(1);
 	timer.Start();
 }
 
 void Game::HandleEvents()
 {
+	//This function is dipatching events to the actual scene
 	SDL_Event event;
 	while(SDL_PollEvent(&event))
 	{

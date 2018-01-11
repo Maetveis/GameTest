@@ -9,6 +9,7 @@ void SceneManager::PushScene(std::unique_ptr<Scene> ptr)
 	}
 	
 	sceneStack.push(std::move(ptr));
+	sceneStack.top()->AttachGame(game);
 	sceneStack.top()->Begin();
 }
 
@@ -17,6 +18,7 @@ void SceneManager::PopScene()
 	sceneStack.top()->End();
 	sceneStack.pop();
 	
+	sceneStack.top()->AttachGame(game);
 	sceneStack.top()->Begin();
 }
 
@@ -29,6 +31,7 @@ void SceneManager::ChangeScene(std::unique_ptr<Scene> ptr)
 	}
 	
 	sceneStack.push(std::move(ptr));
+	sceneStack.top()->AttachGame(game);
 	sceneStack.top()->Begin();
 }
 

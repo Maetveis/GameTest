@@ -4,6 +4,7 @@
 #include "../Event/EventListener.h"
 
 struct SDL_Renderer;
+struct Game;
 
 class Scene :
 	public EventListener

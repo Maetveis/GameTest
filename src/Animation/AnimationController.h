@@ -5,6 +5,7 @@ class AnimationController
 {
 public:
 	void Update();
+	unsigned getFrame();
 protected:
 private:
 }

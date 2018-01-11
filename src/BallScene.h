@@ -12,6 +12,7 @@ class BallScene :
 public:
 	virtual void Begin()
 	{
+		ball.Init(game->renderer);
 	}
 	
 	virtual void End()
@@ -56,6 +57,11 @@ public:
 			}
 		} else {
 		}
+	}
+	
+	virtual void OnQuit(SDL_QuitEvent& event)
+	{
+		game->running = false;
 	}
 protected:
 private:

@@ -1,9 +1,12 @@
 #ifndef Event_Listener_H
 #define Event_Listener_H
 
+#include "../Main/GameComponent.h"
+
 #include <SDL.h>
 
-class EventListener
+class EventListener :
+	public GameComponent
 {
 public:
 	virtual void OnAudioDevice(SDL_AudioDeviceEvent&){}
