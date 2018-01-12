@@ -10,7 +10,7 @@ AABB::AABB(Vector2 lB, Vector2 uB) :
 
 Vector2 AABB::GetCenter() const
 {
-	rerturn 0.5 * (upperBound + lowerBound);
+	return 0.5 * (upperBound + lowerBound);
 }
 
 Vector2 AABB::GetExtents() const
@@ -54,7 +54,7 @@ bool AABB::Overlaps(const AABB& other) const
 bool AABB::Contains(const AABB& other) const
 {
 	return 
-		lowerBound.x <= other.LowerBound.x &&
+		lowerBound.x <= other.lowerBound.x &&
 		lowerBound.y <= other.lowerBound.y &&
 		upperBound.x >= other.upperBound.x &&
 		upperBound.y >= other.upperBound.y;
@@ -62,16 +62,16 @@ bool AABB::Contains(const AABB& other) const
 
 AABB& AABB::Combine(const AABB& other)
 {
-	lowerBound = std::min(lowerBound, other.LowerBound);
-	upperBound = std:max(upperBound, other.upperBound);
+	lowerBound = std::min(lowerBound, other.lowerBound);
+	upperBound = std::max(upperBound, other.upperBound);
 	
 	return *this;
 }
 
 AABB& AABB::Combine(const AABB& box1, const AABB& box2)
 {
-	lowerBound = std::min(box1.lowerBound, box2.LowerBound);
-	upperBound = std:max(box1.upperBound, box2.upperBound);
+	lowerBound = std::min(box1.lowerBound, box2.lowerBound);
+	upperBound = std::max(box1.upperBound, box2.upperBound);
 	
 	return *this;
 }

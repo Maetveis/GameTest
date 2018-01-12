@@ -18,11 +18,13 @@ public:
 	friend Vector2 operator+(const Vector2& lhs, const Vector2& rhs);
 	friend Vector2 operator-(const Vector2& lhs, const Vector2& rhs);
 	
-	Vector2& operator*=(const double d) const;
-	Vector2 operator*(const double d) const;
+	Vector2& operator*=(const double d);
+	friend Vector2 operator*(const Vector2& lhs, const double d);
+	friend Vector2 operator*(const double d, const Vector2& rhs);
 	
-	Vector2& operator /=(const double d) const;
-	Vector2 operator /(const double d) const;
+	Vector2& operator /=(const double d);
+	friend Vector2 operator /(const Vector2& lhs, const double d);
+	friend Vector2 operator /(const double d, const Vector2& rhs);
 	
 	friend bool operator<(const Vector2& lhs, const Vector2& rhs);
 	friend bool operator>(const Vector2& lhs, const Vector2& rhs);

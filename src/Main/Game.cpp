@@ -5,7 +5,7 @@
 #include <SDL.h>
 
 #include <cstdint>
-//#include <iostream>
+#include <iostream>
 
 Game::Game() :
 	running(true)

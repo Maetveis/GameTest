@@ -34,29 +34,40 @@ inline Vector2 operator-(const Vector2& lhs, const Vector2& rhs)
 	return v -= rhs;
 }
 
-inline Vector2& Vector2::operator*=(const double d) const
+inline Vector2& Vector2::operator*=(const double d)
 {
-	this.x *= d;
-	this.y *= d;
+	this->x *= d;
+	this->y *= d;
 	return *this;
 }
 
-inline Vector2& Vector2::operator /=(const double d) const
+inline Vector2& Vector2::operator /=(const double d)
 {
-	this.x /= d;
-	this.y /= d;
+	this->x /= d;
+	this->y /= d;
 	return *this;
 }
 
-inline Vector2 Vector2::operator /(const double d) const
+inline Vector2 operator /(Vector2& lhs, const double d)
 {
-	Vector2 v = *this;
+	Vector2 v = lhs;
 	return v *= d;
 }
 
-inline Vector2 Vector2::operator*(const double d) const
+inline Vector2 operator /(const double d, const Vector2& rhs)
 {
-	Vector2 v = *this;
+	Vector2 v = rhs;
+	return v *= d;
+}
+
+inline Vector2 operator*(const Vector2& lhs, const double d)
+{
+	Vector2 v = lhs;
+	return v *= d;
+}
+inline Vector2 operator*(const double d, const Vector2& rhs) 
+{
+	Vector2 v = rhs;
 	return v *= d;
 }
 
@@ -70,7 +81,7 @@ inline Vector2 cross(const Vector2& lhs, const Vector2& rhs)
 
 inline bool operator<(const Vector2& lhs, const Vector2& rhs)
 {
-	return lhs.x < rhs.x | (!(rhs.x < lhs.x) && lhs.y < rhs.y);
+	return (lhs.x < rhs.x) | (!(rhs.x < lhs.x) && lhs.y < rhs.y);
 }
 
 inline bool operator>(const Vector2& lhs, const Vector2& rhs)
@@ -88,12 +99,12 @@ inline bool operator!=(const Vector2& lhs, const Vector2& rhs)
 	return lhs != rhs;
 }
 
-friend operator<=(const Vector2& lhs, const Vector2& rhs)
+inline bool operator<=(const Vector2& lhs, const Vector2& rhs)
 {
 	return !(rhs < lhs);
 }
 
-friend operator>=(const Vector2& lhs, const Vector2& rhs)
+inline bool operator>=(const Vector2& lhs, const Vector2& rhs)
 {
 	return !(lhs < rhs);
 }

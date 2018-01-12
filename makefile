@@ -4,7 +4,7 @@ SRCDIR=src
 OBJDIR=build/obj
 INCL=include/SDL2
 LIBDIR=lib
-LDFLAGS=
+LDFLAGS=-g
 LDLIBS=-lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 
 RM=rm
@@ -13,9 +13,9 @@ MKDIR=mkdir -p
 
 OUT=bin/main.exe
 
-SRCS=Main/main.cpp Main/Game.cpp Main/Vector2.cpp Main/ScaledDeltaTimer.cpp Main/GameComponent.cpp \
+SRCS=Main/main.cpp Main/Game.cpp Main/ScaledDeltaTimer.cpp Main/GameComponent.cpp \
 	Scene/SceneManager.cpp Main/ScaledDeltaTimer.cpp \
-	Render/Sprite.cpp Render/SpriteHandle.cpp Render/SpriteLoader.cpp Render/RenderManager.cpp\
+	Render/Sprite.cpp Render/SpriteHandle.cpp Render/SpriteLoader.cpp Render/RenderManager.cpp Render/AABB.cpp Render/DynamicAABBTree.cpp\
 	Ball.cpp
 
 OBJNAMES := $(SRCS:.cpp=.o)
