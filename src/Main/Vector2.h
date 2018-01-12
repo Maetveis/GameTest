@@ -18,13 +18,25 @@ public:
 	friend Vector2 operator+(const Vector2& lhs, const Vector2& rhs);
 	friend Vector2 operator-(const Vector2& lhs, const Vector2& rhs);
 	
-	friend Vector2& operator*=(Vector2& lhs, const double d);
-	friend Vector2 operator*(const Vector2& lhs, const double d);
+	Vector2& operator*=(const double d) const;
+	Vector2 operator*(const double d) const;
+	
+	Vector2& operator /=(const double d) const;
+	Vector2 operator /(const double d) const;
+	
+	friend bool operator<(const Vector2& lhs, const Vector2& rhs);
+	friend bool operator>(const Vector2& lhs, const Vector2& rhs);
+	friend bool operator==(const Vector2& lhs, const Vector2& rhs);
+	friend bool operator!=(const Vector2& lhs, const Vector2& rhs);
+	friend bool operator<=(const Vector2& lhs, const Vector2& rhs);
+	friend bool operator>=(const Vector2& lhs, const Vector2& rhs);
 	
 	double x;
 	double y;
 protected:
 private:
 };
+
+#include "Vector2.hpp"
 
 #endif //VECTOR2_H

@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-Wall -O0 -g -std=c++14 -m64 -MMD -MP
+CXXFLAGS=-Wall -O0 -g -std=c++14 -MMD -MP
 SRCDIR=src
 OBJDIR=build/obj
 INCL=include/SDL2
@@ -15,7 +15,7 @@ OUT=bin/main.exe
 
 SRCS=Main/main.cpp Main/Game.cpp Main/Vector2.cpp Main/ScaledDeltaTimer.cpp Main/GameComponent.cpp \
 	Scene/SceneManager.cpp Main/ScaledDeltaTimer.cpp \
-	Render/Sprite.cpp Render/SpriteHandle.cpp Render/SpriteLoader.cpp \
+	Render/Sprite.cpp Render/SpriteHandle.cpp Render/SpriteLoader.cpp Render/RenderManager.cpp\
 	Ball.cpp
 
 OBJNAMES := $(SRCS:.cpp=.o)

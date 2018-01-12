@@ -30,10 +30,8 @@ void Game::Init()
 	//Initializing SDL
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	
-	//Spawning window and renderer
-	mainWindow = SDL_CreateWindow("GameTest", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
-	
-	renderer = SDL_CreateRenderer(mainWindow, 0, SDL_RENDERER_ACCELERATED);
+	//Initializing RenderManager
+	manager.Init();
 	
 	//Starting main Scene
 	sceneManager.AttachGame(this);
@@ -133,8 +131,7 @@ void Game::Update()
 
 void Game::Render()
 {
-	sceneManager.currentScene()->Render(renderer);
-	SDL_RenderPresent(renderer);
+	manager.Render();
 }
 
 void Game::DelayFrameTime(const unsigned frameStart, const unsigned short targetFPS)

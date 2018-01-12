@@ -2,6 +2,11 @@
 
 #include "Sprite.h"
 
+SpriteHandle::SpriteHandle() :
+	flip(SDL_FLIP_NONE)
+{
+}
+
 SpriteHandle::SpriteHandle(
 	Sprite* s,
 	const int x,
@@ -26,13 +31,17 @@ SpriteHandle::SpriteHandle(
 
 SpriteHandle::SpriteHandle(Sprite* s) :
 	sprite(s),
+	flip(SDL_FLIP_NONE),
 	enabled(false)
 {
 }
 
 void SpriteHandle::Render(SDL_Renderer* renderer)
 {
-	sprite->DrawRotated(renderer, &srcRect, &destRect, angle, &center, flip);
+	if(enabled)
+	{
+		sprite->DrawRotated(renderer, &srcRect, &destRect, angle, &center, flip);
+	}
 }
 
 void SpriteHandle::SetSprite(Sprite* s)

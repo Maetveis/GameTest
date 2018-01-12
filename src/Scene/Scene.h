@@ -14,7 +14,6 @@ public:
 	virtual void End(){};
 	virtual void Pause(){};
 	virtual void Update(const double){};
-	virtual void Render(SDL_Renderer* renderer){};
 protected:
 private:
 };

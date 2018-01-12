@@ -12,7 +12,7 @@ class BallScene :
 public:
 	virtual void Begin()
 	{
-		ball.Init(game->renderer);
+		ball.Init(game);
 	}
 	
 	virtual void End()
@@ -26,14 +26,6 @@ public:
 	virtual void Update(double deltaTime)
 	{
 		ball.Update(deltaTime);
-	}
-	
-	virtual void Render(SDL_Renderer* renderer)
-	{
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_Rect rect = {0, 0, 640, 480};
-		SDL_RenderFillRect(renderer, &rect);
-		ball.Render(renderer);
 	}
 	
 	virtual void OnKeyboard(SDL_KeyboardEvent& event)

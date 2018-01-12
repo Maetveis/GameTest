@@ -1,5 +1,6 @@
 #include "../Scene/SceneManager.h"
 #include "ScaledDeltaTimer.h"
+#include "../Render/RenderManager.h"
 
 struct SDL_Renderer;
 struct SDL_Window;
@@ -11,8 +12,8 @@ public:
 	Game();
 	void Run();
 	
-	SDL_Renderer *renderer;
 	bool running;
+	RenderManager manager;
 protected:
 private:
 	void Init();
@@ -22,8 +23,7 @@ private:
 	void Destroy();
 	void DelayFrameTime(const unsigned frameStart, const unsigned short targetFPS);
 	
+	SceneManager sceneManager;
 	ScaledDeltaTimer timer;
 	unsigned short targetFPS = 60;
-	SDL_Window *mainWindow;
-	SceneManager sceneManager;
 };

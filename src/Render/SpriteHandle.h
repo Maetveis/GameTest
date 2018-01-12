@@ -8,7 +8,7 @@ struct Sprite;
 class SpriteHandle
 {
 public:
-	SpriteHandle() = default;
+	SpriteHandle();
 	~SpriteHandle() = default;
 	
 	explicit SpriteHandle(Sprite* s);
@@ -57,7 +57,7 @@ private:
 	SDL_Rect destRect;
 	double angle;
 	SDL_Point center;
-	SDL_RendererFlip flip = SDL_FLIP_NONE; //Very important to have a default value.
+	SDL_RendererFlip flip;
 	bool enabled;
 };
 
