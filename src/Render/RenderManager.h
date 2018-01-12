@@ -6,6 +6,7 @@
 #include "SpriteHandle.h"
 #include "SpriteLoader.h"
 #include "../Main/GameComponent.h"
+#include "DynamicAABBTree.h"
 
 struct SDL_Renderer;
 struct SDL_Window;
@@ -24,7 +25,11 @@ public:
 protected:
 private:
 	SpriteLoader loader;
+	DynamicAABBTree tree;
+	
 	std::array< std::vector< SpriteHandle >, 64> layers;
+	
+	AABB boxes[10];
 	
 	SDL_Renderer* renderer;
 	SDL_Window* mainWindow;

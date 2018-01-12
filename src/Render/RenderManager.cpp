@@ -8,13 +8,26 @@ void RenderManager::Render()
 	SDL_Rect rect = {0, 0, 640, 480};
 	SDL_RenderFillRect(renderer, &rect);
 	
-	for(unsigned short i = 0; i < layers.size(); ++i)
+	/*for(unsigned short i = 0; i < layers.size(); ++i)
 	{
 		for(unsigned j = 0; j < layers[i].size(); ++j)
 		{
 			layers[i][j].Render(renderer);
 		}
-	}
+	}*/
+	
+	auto lambda = [this](int id) -> bool
+	{
+		AABB aabb = tree.GetFatAABB(id);
+		Vector2 diff = aabb.upperBound - aabb.lowerBound;
+		SDL_Rect rect = {aabb.lowerBound.x, aabb.lowerBound.y, diff.x, diff.y};
+		SDL_RenderDrawRect(renderer, &rect);
+		
+		return true;
+	};
+	
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 170);
+	tree.Query(lambda, AABB(Vector2(100, 100), Vector2(260, 260)));
 	SDL_RenderPresent(renderer);
 }
 
@@ -27,6 +40,22 @@ void RenderManager::Init()
 	renderer = SDL_CreateRenderer(mainWindow, 0, SDL_RENDERER_ACCELERATED);
 	
 	loader.AttachRenderer(renderer);
+	
+	
+	AABB aabb = AABB(Vector2(0, 0), Vector2(20, 20));
+	tree.CreateProxy(aabb, 0);
+	
+	aabb.lowerBound = Vector2(100, 100);
+	aabb.upperBound = Vector2(260, 260);
+	tree.CreateProxy(aabb, 0);
+	
+	aabb.lowerBound = Vector2(200, 200);
+	aabb.upperBound = Vector2(210, 210);
+	tree.CreateProxy(aabb, 0);
+	
+	aabb.lowerBound = Vector2(240, 240);
+	aabb.upperBound = Vector2(500, 500);
+	tree.CreateProxy(aabb, 0);
 }
 
 

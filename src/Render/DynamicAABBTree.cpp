@@ -13,7 +13,7 @@ int DynamicAABBTree::CreateProxy(const AABB& aabb, void* userData)
 	int proxyId = nodes.AllocateNode();
 
 	// Fatten the aabb.
-	Vector2 r(50, 50);
+	Vector2 r(aabb_extension, aabb_extension);
 	nodes[proxyId].aabb.lowerBound = aabb.lowerBound - r;
 	nodes[proxyId].aabb.upperBound = aabb.upperBound + r;
 	nodes[proxyId].userData = userData;
@@ -41,12 +41,12 @@ bool DynamicAABBTree::MoveProxy(int proxyId, const AABB& aabb, const Vector2& di
 
 	// Extend AABB.
 	AABB b = aabb;
-	Vector2 r(50, 50);
+	Vector2 r(aabb_extension, aabb_extension);
 	b.lowerBound = b.lowerBound - r;
 	b.upperBound = b.upperBound + r;
 
 	// Predict AABB displacement.
-	Vector2 d = 10 * displacement;
+	Vector2 d = aabb_multiplier * displacement;
 
 	if (d.x < 0.0d)
 	{

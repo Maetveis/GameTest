@@ -4,8 +4,11 @@
 #include "AABB.h"
 
 #include <stack>
+#include <iostream>
 
 #define null_node -1
+#define aabb_extension 0.1d
+#define aabb_multiplier 2.0d
 
 class DynamicAABBTree
 {

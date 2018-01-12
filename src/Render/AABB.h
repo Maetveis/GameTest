@@ -11,7 +11,7 @@ public:
 	AABB(const AABB&) = default;
 	AABB& operator=(const AABB&) = default;
 	
-	AABB(Vector2 sW, Vector2 nE);
+	AABB(Vector2 lB, Vector2 uB);
 	
 	Vector2 GetCenter() const;
 	Vector2 GetExtents() const;
