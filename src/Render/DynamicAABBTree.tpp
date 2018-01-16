@@ -1,16 +1,86 @@
 #include "DynamicAABBTree.h"
 
+#include <stack>
 #include <algorithm>
 
-DynamicAABBTree::DynamicAABBTree() :
-	root(null_node),
-	nodes(16)
-{		
-}
-	
-int DynamicAABBTree::CreateProxy(const AABB& aabb, void* userData)
+template<typename T>
+template<class K>
+inline void DynamicAABBTree<T>::Query(K* callback, const AABB& aabb) const
 {
-	int proxyId = nodes.AllocateNode();
+	std::stack<int> stack;
+	stack.push(root);
+
+	while(!stack.empty())
+	{
+		int nodeId = stack.top();
+		stack.pop();
+		
+		if (nodeId == null_node)
+		{
+			continue;
+		}
+
+		const Node& node = nodes[nodeId];
+
+		if (node.aabb.Overlaps(aabb))
+		{
+			if (node.IsLeaf())
+			{
+				bool proceed = callback->QueryCallback(nodeId);
+				if (!proceed)
+				{
+					return;
+				}
+			}
+			else
+			{
+				stack.push(node.left);
+				stack.push(node.right);
+			}
+		}
+	}
+}
+
+template<typename T>
+inline T* DynamicAABBTree<T>::GetUserData(unsigned proxyId) const
+{
+	return nodes[proxyId].userData;
+}
+
+template<typename T>
+inline const AABB& DynamicAABBTree<T>::GetFatAABB(unsigned proxyId) const
+{
+	return nodes[proxyId].aabb;
+}
+
+template<typename T>
+DynamicAABBTree<T>::DynamicAABBTree() :
+	freeList(0),
+	nodeCount(0),
+	nodeCapacity(16),
+	root(null_node)
+	
+{
+	nodes = new Node[nodeCapacity];
+	for(unsigned i = 0; i < nodeCapacity - 1; ++i)
+	{
+		nodes[i].next = i + 1;
+		nodes[i].height = -1;
+	}
+	nodes[nodeCapacity - 1].height = -1;
+	nodes[nodeCapacity - 1].next = null_node;
+}
+
+template<typename T>
+DynamicAABBTree<T>::~DynamicAABBTree()
+{
+	delete nodes;
+}
+
+template<typename T>
+int DynamicAABBTree<T>::CreateProxy(const AABB& aabb, T* userData)
+{
+	int proxyId = AllocateNode();
 
 	// Fatten the aabb.
 	Vector2 r(aabb_extension, aabb_extension);
@@ -23,14 +93,16 @@ int DynamicAABBTree::CreateProxy(const AABB& aabb, void* userData)
 
 	return proxyId;
 }
-	
-void DynamicAABBTree::DestroyProxy(int proxyId)
+
+template<typename T>
+void DynamicAABBTree<T>::DestroyProxy(int proxyId)
 {
 	RemoveLeaf(proxyId);
 	nodes.FreeNode(proxyId);
 }
-	
-bool DynamicAABBTree::MoveProxy(int proxyId, const AABB& aabb, const Vector2& displacement)
+
+template<typename T>
+bool DynamicAABBTree<T>::MoveProxy(int proxyId, const AABB& aabb, const Vector2& displacement)
 {
 	if (nodes[proxyId].aabb.Contains(aabb))
 	{
@@ -73,7 +145,8 @@ bool DynamicAABBTree::MoveProxy(int proxyId, const AABB& aabb, const Vector2& di
 	return true;
 }
 	
-int DynamicAABBTree::NodePool::AllocateNode()
+template<typename T>
+int DynamicAABBTree<T>::AllocateNode()
 {
 	if(freeList == null_node)
 	{
@@ -92,7 +165,8 @@ int DynamicAABBTree::NodePool::AllocateNode()
 	return node;
 }
 
-inline void DynamicAABBTree::NodePool::Expand()
+template<typename T>
+inline void DynamicAABBTree<T>::Expand()
 {
 	Node* newNodes = new Node[nodeCapacity * 2];
 	for(unsigned i = 0; i < nodeCount; ++i)
@@ -113,7 +187,8 @@ inline void DynamicAABBTree::NodePool::Expand()
 	freeList = nodeCount;
 }
 
-void DynamicAABBTree::NodePool::FreeNode(const unsigned node)
+template<typename T>
+void DynamicAABBTree<T>::FreeNode(const unsigned node)
 {
 	nodes[node].next = freeList;
 	nodes[node].height = -1;
@@ -121,7 +196,8 @@ void DynamicAABBTree::NodePool::FreeNode(const unsigned node)
 	--nodeCount;
 }
 	
-void DynamicAABBTree::InsertLeaf(const int leaf)
+template<typename T>
+void DynamicAABBTree<T>::InsertLeaf(const int leaf)
 {
 	if(root == null_node)
 	{
@@ -133,7 +209,7 @@ void DynamicAABBTree::InsertLeaf(const int leaf)
 	AABB leafAABB = nodes[leaf].aabb;
 	
 	int oldParent = nodes[sibling].parent;
-	int newParent = nodes.AllocateNode();
+	int newParent = AllocateNode();
 	nodes[newParent].parent = oldParent;
 	nodes[newParent].userData = nullptr;
 	nodes[newParent].aabb.Combine(leafAABB, nodes[sibling].aabb);
@@ -169,7 +245,8 @@ void DynamicAABBTree::InsertLeaf(const int leaf)
 	FixTree(nodes[leaf].parent);
 }
 
-inline void DynamicAABBTree::FixTree(int index)
+template<typename T>
+inline void DynamicAABBTree<T>::FixTree(int index)
 {
 	// Walk back up the tree fixing heights and AABBs
 	while (index != null_node)
@@ -186,7 +263,8 @@ inline void DynamicAABBTree::FixTree(int index)
 	}
 }
 
-inline unsigned DynamicAABBTree::FindBestSibling(const int leaf) const
+template<typename T>
+inline unsigned DynamicAABBTree<T>::FindBestSibling(const int leaf) const
 {
 	AABB leafAABB = nodes[leaf].aabb;
 	int index = root;
@@ -223,7 +301,8 @@ inline unsigned DynamicAABBTree::FindBestSibling(const int leaf) const
 	return index;
 } 
 
-inline double DynamicAABBTree::ComputeCost(const int node, const double inheritanceCost, const AABB& leafAABB) const
+template<typename T>
+inline double DynamicAABBTree<T>::ComputeCost(const int node, const double inheritanceCost, const AABB& leafAABB) const
 {
 	double cost;
 	if (nodes[node].IsLeaf())
@@ -243,7 +322,8 @@ inline double DynamicAABBTree::ComputeCost(const int node, const double inherita
 	return cost;
 }
 
-void DynamicAABBTree::RemoveLeaf(int leaf)
+template<typename T>
+void DynamicAABBTree<T>::RemoveLeaf(int leaf)
 {
 	if (leaf == root)
 	{
@@ -275,7 +355,7 @@ void DynamicAABBTree::RemoveLeaf(int leaf)
 			nodes[grandParent].right = sibling;
 		}
 		nodes[sibling].parent = grandParent;
-		nodes.FreeNode(parent);
+		FreeNode(parent);
 
 		// Adjust ancestor bounds.
 		FixTree(grandParent);
@@ -284,12 +364,13 @@ void DynamicAABBTree::RemoveLeaf(int leaf)
 	{
 		root = sibling;
 		nodes[sibling].parent = null_node;
-		nodes.FreeNode(parent);
+		FreeNode(parent);
 	}
 }
 
 //If this is confusing its just AVL tree rotations in a single function
-int DynamicAABBTree::Balance(int iA)
+template<typename T>
+int DynamicAABBTree<T>::Balance(int iA)
 {
 	Node& A = nodes[iA];
 	if (A.IsLeaf() || A.height < 2)

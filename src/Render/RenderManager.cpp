@@ -16,19 +16,20 @@ void RenderManager::Render()
 		}
 	}*/
 	
-	auto lambda = [this](int id) -> bool
-	{
-		AABB aabb = tree.GetFatAABB(id);
-		Vector2 diff = aabb.upperBound - aabb.lowerBound;
-		SDL_Rect rect = {aabb.lowerBound.x, aabb.lowerBound.y, diff.x, diff.y};
-		SDL_RenderDrawRect(renderer, &rect);
-		
-		return true;
-	};
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 170);
-	tree.Query(lambda, AABB(Vector2(100, 100), Vector2(260, 260)));
+	tree.Query(this, AABB(Vector2(100, 100), Vector2(260, 260)));
 	SDL_RenderPresent(renderer);
+}
+
+bool RenderManager::QueryCallback(const int id) const
+{
+	AABB aabb = tree.GetFatAABB(id);
+	Vector2 diff = aabb.upperBound - aabb.lowerBound;
+	SDL_Rect rect = {static_cast<int>(aabb.lowerBound.x), static_cast<int>(aabb.lowerBound.y), static_cast<int>(diff.x), static_cast<int>(diff.y)};
+	SDL_RenderDrawRect(renderer, &rect);
+	
+	return true;
 }
 
 void RenderManager::Init()

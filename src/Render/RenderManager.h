@@ -22,10 +22,13 @@ public:
 	void Render();
 	
 	SpriteHandle* GetFile(const char* filename, unsigned short layer);
+	
+	bool QueryCallback(const int node) const;
 protected:
 private:
+
 	SpriteLoader loader;
-	DynamicAABBTree tree;
+	DynamicAABBTree<int> tree;
 	
 	std::array< std::vector< SpriteHandle >, 64> layers;
 	

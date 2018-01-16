@@ -14,6 +14,7 @@ Game::Game() :
 
 void Game::Run()
 {
+	//Main loop
 	Init();
 	while(running)
 	{

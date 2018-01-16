@@ -15,7 +15,7 @@ OUT=bin/main.exe
 
 SRCS=Main/main.cpp Main/Game.cpp Main/ScaledDeltaTimer.cpp Main/GameComponent.cpp \
 	Scene/SceneManager.cpp Main/ScaledDeltaTimer.cpp \
-	Render/Sprite.cpp Render/SpriteHandle.cpp Render/SpriteLoader.cpp Render/RenderManager.cpp Render/AABB.cpp Render/DynamicAABBTree.cpp\
+	Render/Sprite.cpp Render/SpriteHandle.cpp Render/SpriteLoader.cpp Render/RenderManager.cpp Render/AABB.cpp\
 	Ball.cpp
 
 OBJNAMES := $(SRCS:.cpp=.o)
@@ -24,7 +24,7 @@ BUILD_DIRS := $(patsubst %/,%,$(sort $(dir $(OBJS))))
 
 all : $(OUT)
 
-.PHONY: clean all dirtree
+.PHONY: clean all
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.cpp | $(BUILD_DIRS)
 	$(CXX) $< -c $(CXXFLAGS) -I$(INCL) -o $@
