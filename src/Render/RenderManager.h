@@ -3,10 +3,9 @@
 
 #include <vector>
 
-#include "SpriteHandle.h"
-#include "SpriteLoader.h"
 #include "../Main/GameComponent.h"
-#include "DynamicAABBTree.h"
+#include "Sprite.h"
+//#include "DynamicAABBTree.h"
 
 struct SDL_Renderer;
 struct SDL_Window;
@@ -21,18 +20,15 @@ public:
 	
 	void Render();
 	
-	SpriteHandle* GetFile(const char* filename, unsigned short layer);
+	Sprite* GetFile(const char* filename);
 	
-	bool QueryCallback(const int node) const;
+	//bool QueryCallback(const int node) const;
 protected:
 private:
-
-	SpriteLoader loader;
-	DynamicAABBTree<int> tree;
+	//SpriteLoader loader;
+	//DynamicAABBTree<int> tree;
 	
-	std::array< std::vector< SpriteHandle >, 64> layers;
-	
-	AABB boxes[10];
+	std::vector<Sprite> sprites;
 	
 	SDL_Renderer* renderer;
 	SDL_Window* mainWindow;

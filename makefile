@@ -14,8 +14,8 @@ MKDIR=mkdir -p
 OUT=bin/main.exe
 
 SRCS=Main/main.cpp Main/Game.cpp Main/ScaledDeltaTimer.cpp Main/GameComponent.cpp \
-	Scene/SceneManager.cpp Main/ScaledDeltaTimer.cpp \
-	Render/Sprite.cpp Render/SpriteHandle.cpp Render/SpriteLoader.cpp Render/RenderManager.cpp Render/AABB.cpp\
+	Scene/SceneManager.cpp \
+	Render/RenderManager.cpp \
 	Ball.cpp
 
 OBJNAMES := $(SRCS:.cpp=.o)
@@ -26,7 +26,7 @@ all : $(OUT)
 
 .PHONY: clean all
 
-$(OBJDIR)/%.o : $(SRCDIR)/%.cpp | $(BUILD_DIRS)
+$(OBJS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp | $(BUILD_DIRS)
 	$(CXX) $< -c $(CXXFLAGS) -I$(INCL) -o $@
 
 $(OUT) : $(OBJS)

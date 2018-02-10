@@ -1,42 +1,83 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
+#include "Texture.h"
+
 #include <SDL.h>
-#include <SDL_Image.h>
 
 class Sprite
 {
 public:
-	~Sprite();
-	Sprite();
-	explicit Sprite(SDL_Renderer* renderer, const char* filename);
-	explicit Sprite(SDL_Texture* texture);
-	explicit Sprite(SDL_Renderer* renderer, SDL_Surface* surface);
+	Sprite() = delete;
+	Sprite(const Sprite&) = default;
 	
-	Sprite(Sprite&& rhs);
-	Sprite(const Sprite&) = delete;
-	Sprite& operator=(const Sprite&) = delete;
+	Sprite& operator=(const Sprite&) = default;
+
+	Sprite(Texture* text) :
+		texture(text)
+	{	
+	}
+
+	Sprite(Texture* text, const SDL_Rect srect, const SDL_Rect drect) :
+		texture(text),
+		srcRect(srect),
+		destRect(drect)
+	{
+	}
 	
-	void FromFile(SDL_Renderer* renderer, const char* filename);
-	void FromTexture(SDL_Texture* texture);
-	void FromSurface(SDL_Renderer* renderer, SDL_Surface* surface);
+	void Render(SDL_Renderer* renderer) const
+	{
+		texture->Render(renderer, &srcRect, &destRect);
+	}
 	
-	void Draw(SDL_Renderer* renderer, const SDL_Rect* srcRect, const SDL_Rect* destRect) const;
-	void DrawRotated(
-		SDL_Renderer* renderer,
-		const SDL_Rect* srcRect,
-		const SDL_Rect* destRect,
-		const double angle,
-		const SDL_Point* center,
-		const SDL_RendererFlip flip = SDL_FLIP_NONE
-	) const;
+	SDL_Rect GetSrcRect() const
+	{
+		return srcRect;
+	}
 	
-	bool IsLoaded() const;
+	SDL_Rect GetDestRect() const
+	{
+		return destRect;
+	}
 	
-	void Clear();
+	void SetSrcRect(const SDL_Rect& srect)
+	{
+		srcRect = srect;
+	}
+	
+	void SetDestRect(const SDL_Rect& drect)
+	{
+		destRect = drect;
+	}
+	
+	void MoveSrcRect(const int x, const int y)
+	{
+		srcRect.x += x;
+		srcRect.y += y;
+	}
+	
+	void MoveDestRect(const int x, const int y)
+	{
+		destRect.x += x;
+		destRect.y += y;
+	}
+	
+	void GrowSrcRect(const int w, const int h)
+	{
+		srcRect.w += w;
+		srcRect.h += h;
+	}
+	
+	void GrowDestRect(const int w, const int h)
+	{
+		destRect.w += w;
+		destRect.h += h;
+	}
 protected:
 private:
-	SDL_Texture* texture;
+	Texture* texture;
+	SDL_Rect srcRect;
+	SDL_Rect destRect;
 };
 
 #endif //SPRITE_H

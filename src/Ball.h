@@ -4,6 +4,8 @@
 
 #include <vector>
 
+class Sprite;
+
 class Game;
 class SpriteHandle;
 
@@ -16,7 +18,5 @@ public:
 private:
 	SDL_Rect rect = {0, 0, 100, 100};
 	Vector2 pos = Vector2(0, 0);
-	SpriteHandle* handle;
-	SpriteHandle* handlex;
-	SpriteHandle* handley;
+	Sprite* ball;
 };

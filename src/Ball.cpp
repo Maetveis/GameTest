@@ -1,27 +1,13 @@
 #include "Ball.h"
 #include "Main/Game.h"
-#include "Render/SpriteHandle.h"
+#include "Render/Sprite.h"
 
 #include <SDL.h>
 
 void Ball::Init(Game* game)
 {
-	handle = game->manager.GetFile("img/ball.png", 1);
-	
-	handle->SetSourceRect(0, 0, 100, 100);
-	handle->SetRotation(0);
-	handle->SetEnabled(true);
-	
-	handlex = game->manager.GetFile("img/ball.png", 2);
-	handley = game->manager.GetFile("img/ball.png", 3);
-	
-	handlex->SetSourceRect(0, 0, 100, 100);
-	handlex->SetRotation(0);
-	handlex->SetEnabled(true);
-	
-	handley->SetSourceRect(0, 0, 100, 100);
-	handley->SetRotation(0);
-	handley->SetEnabled(true);
+	ball = game->manager.GetFile("img/ball.png");
+	ball->SetSrcRect(SDL_Rect{0, 0, 100, 100});
 }
 
 void Ball::Update(const double deltaTime)
@@ -51,7 +37,7 @@ void Ball::Update(const double deltaTime)
 		speed.y = -speed.y;
 		speed.y *= 0.75;
 	}
-	handle->SetDestRect(pos.x, pos.y, 100, 100);
-	handlex->SetDestRect(pos.x, 0, 100, 100);
-	handley->SetDestRect(0, pos.y, 100, 100);
+	
+	SDL_Rect rect = {static_cast<int>(pos.x), static_cast<int>(pos.y), 100, 100};
+	ball->SetDestRect(rect);
 }

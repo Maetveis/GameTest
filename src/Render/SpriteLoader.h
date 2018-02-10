@@ -2,9 +2,10 @@
 #define SPRITE_LOADER_H
 
 #include "Sprite.h"
-#include "SpriteHandle.h"
+#include "Texture.h"
 
 #include <map>
+#include <memory>
 
 struct SDL_Renderer;
 
@@ -18,7 +19,7 @@ public:
 protected:
 private:
 	SDL_Renderer* renderer;
-	std::map< const char*, Sprite > sprites;
+	std::unordered_map< const char*, Texture> textures;
 };
 
 #endif //SPRITE_LOADER_H

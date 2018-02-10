@@ -16,26 +16,10 @@ AnimationController(const int l, const double s, const int sF, const bool a) :
 void Update(unsigned double delta)
 {
 	if(speed != 0)
-	{	
-		remainder += delta;
-		int advance = remainder / speed;
-		remainder -= advance * speed;
-	}
-	if(frame + advance > length)
-	{
-		if(alternate)
-		{
-		}
-		else
-		{
-			frame = lenth 
-		}
-	} 
-	else if(-advance > frame)
-	{
 		
-	}
-	
+	remainder += delta;
+	int advance = static_cast<int>(remainder * speed);
+	remainder = std::fmod(remainder, speed);
 }
 
 unsigned GetFrame() const

@@ -8,21 +8,18 @@ void RenderManager::Render()
 	SDL_Rect rect = {0, 0, 640, 480};
 	SDL_RenderFillRect(renderer, &rect);
 	
-	/*for(unsigned short i = 0; i < layers.size(); ++i)
+	/*SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
+	tree.Query(this, AABB(Vector2(0, 0), Vector2(640, 480)));
+	*/
+	
+	for(auto& it: sprites)
 	{
-		for(unsigned j = 0; j < layers[i].size(); ++j)
-		{
-			layers[i][j].Render(renderer);
-		}
-	}*/
-	
-	
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 170);
-	tree.Query(this, AABB(Vector2(100, 100), Vector2(260, 260)));
+		it.Render(renderer);
+	}
 	SDL_RenderPresent(renderer);
 }
 
-bool RenderManager::QueryCallback(const int id) const
+/*bool RenderManager::QueryCallback(const int id) const
 {
 	AABB aabb = tree.GetFatAABB(id);
 	Vector2 diff = aabb.upperBound - aabb.lowerBound;
@@ -30,7 +27,7 @@ bool RenderManager::QueryCallback(const int id) const
 	SDL_RenderDrawRect(renderer, &rect);
 	
 	return true;
-}
+}*/
 
 void RenderManager::Init()
 {
@@ -40,8 +37,7 @@ void RenderManager::Init()
 	//Starting renderer
 	renderer = SDL_CreateRenderer(mainWindow, 0, SDL_RENDERER_ACCELERATED);
 	
-	loader.AttachRenderer(renderer);
-	
+	/*loader.AttachRenderer(renderer);
 	
 	AABB aabb = AABB(Vector2(0, 0), Vector2(20, 20));
 	tree.CreateProxy(aabb, 0);
@@ -56,16 +52,16 @@ void RenderManager::Init()
 	
 	aabb.lowerBound = Vector2(240, 240);
 	aabb.upperBound = Vector2(500, 500);
-	tree.CreateProxy(aabb, 0);
+	tree.CreateProxy(aabb, 0);*/
 }
 
 
-SpriteHandle* RenderManager::GetFile(const char* filename, unsigned short layer)
+Sprite* RenderManager::GetFile(const char* filename)
 {
-	unsigned index = layers[layer].size();
-	layers[layer].push_back(SpriteHandle());
-	loader.GetFile(layers[layer][index], filename);
+	Texture* text = new Texture;
+	text->FromFile(renderer, filename);
 	
-	return &layers[layer][index];
+	sprites.push_back(Sprite(text));
+	return &sprites.back();
 }
 

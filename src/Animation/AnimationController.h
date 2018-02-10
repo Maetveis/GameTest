@@ -6,7 +6,7 @@ class AnimationController
 public:
 	AnimationController();
 	
-	AnimationController(const unsigned length, const double speed, const unsigned startFrame = 0, const bool alternate = false);
+	AnimationController(const int endFrame, const double speed, const int startFrame = 0, const bool alternate = false);
 
 	void Update(double delta);
 	
@@ -23,11 +23,13 @@ public:
 	void SetAlternate(bool alt);
 protected:
 private:
-	int length;
-	double speed;
+	const int startFrame;
+	const int endFrame;
+	
 	int frame;
-	bool alternate;
+	double speed;
 	double remainder;
+	bool alternate;
 }
 
 #endif //ANIMATION_CONTROLLER_H

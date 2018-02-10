@@ -9,7 +9,7 @@ void SpriteLoader::AttachRenderer(SDL_Renderer* r)
 	renderer = r;
 }
 
-void SpriteLoader::GetFile(SpriteHandle& handle, const char* filename)
+Sprite* Loader::GetFile(const char* filename)
 {
 	auto it = sprites.find(filename);
 	if(it != sprites.end())
