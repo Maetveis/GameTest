@@ -6,7 +6,10 @@ class Game;
 class GameComponent
 {
 public:
-	void AttachGame(Game* game);
+	void AttachGame(Game* g)
+	{
+		game = g;
+	}
 protected:
 	Game* game;
 private:

@@ -36,7 +36,7 @@ void Game::Init()
 	
 	//Starting main Scene
 	sceneManager.AttachGame(this);
-	sceneManager.ChangeScene(std::unique_ptr<Scene>(new BallScene));
+	sceneManager.ChangeScene(std::make_unique<BallScene>());
 	
 	//Starting delta timer
 	timer.SetScaleFactor(1);

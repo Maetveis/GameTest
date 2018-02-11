@@ -13,7 +13,7 @@ MKDIR=mkdir -p
 
 OUT=bin/main.exe
 
-SRCS=Main/main.cpp Main/Game.cpp Main/ScaledDeltaTimer.cpp Main/GameComponent.cpp \
+SRCS=Main/main.cpp Main/Game.cpp Main/ScaledDeltaTimer.cpp \
 	Scene/SceneManager.cpp \
 	Render/RenderManager.cpp Render/AABB.cpp Render/Camera.cpp \
 	Ball.cpp
