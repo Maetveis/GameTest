@@ -18,6 +18,30 @@ Vector2 AABB::GetExtents() const
 	return 0.5 * (upperBound - lowerBound);
 }
 
+Vector2 AABB::GetSides() const
+{
+	return upperBound - lowerBound;
+}
+
+void AABB::Move(const Vector2& diff)
+{
+	lowerBound += diff;
+	upperBound += diff;
+}
+
+void AABB::SetPos(const Vector2& pos)
+{
+	const Vector2 sides = GetSides();
+	lowerBound = pos;
+	upperBound = lowerBound + sides;
+}
+
+void AABB::Expand(const Vector2& lower, const Vector2& upper)
+{
+	lowerBound += lower;
+	upperBound += upper;
+}
+
 double AABB::GetPerimeter() const
 {
 	double width = upperBound.x - lowerBound.x;

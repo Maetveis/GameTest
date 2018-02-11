@@ -40,6 +40,18 @@ public:
 		return destRect;
 	}
 	
+	void SetSrcPos(int x, int y)
+	{
+		srcRect.x = x;
+		srcRect.y = y;
+	}
+	
+	void SetDestPos(int x, int y)
+	{
+		destRect.x = x;
+		destRect.y = y;
+	}
+	
 	void SetSrcRect(const SDL_Rect& srect)
 	{
 		srcRect = srect;

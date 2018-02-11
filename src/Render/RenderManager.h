@@ -5,7 +5,7 @@
 
 #include "../Main/GameComponent.h"
 #include "Sprite.h"
-//#include "DynamicAABBTree.h"
+#include "DynamicAABBTree.h"
 
 struct SDL_Renderer;
 struct SDL_Window;

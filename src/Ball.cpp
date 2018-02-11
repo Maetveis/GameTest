@@ -8,6 +8,7 @@ void Ball::Init(Game* game)
 {
 	ball = game->manager.GetFile("img/ball.png");
 	ball->SetSrcRect(SDL_Rect{0, 0, 100, 100});
+	ball->SetDestRect(SDL_Rect{0, 0, 100, 100});
 }
 
 void Ball::Update(const double deltaTime)
@@ -38,6 +39,5 @@ void Ball::Update(const double deltaTime)
 		speed.y *= 0.75;
 	}
 	
-	SDL_Rect rect = {static_cast<int>(pos.x), static_cast<int>(pos.y), 100, 100};
-	ball->SetDestRect(rect);
+	ball->SetDestPos(static_cast<int>(pos.x), static_cast<int>(pos.y));
 }

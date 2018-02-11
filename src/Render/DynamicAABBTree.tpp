@@ -84,8 +84,10 @@ int DynamicAABBTree<T>::CreateProxy(const AABB& aabb, T* userData)
 
 	// Fatten the aabb.
 	Vector2 r(aabb_extension, aabb_extension);
-	nodes[proxyId].aabb.lowerBound = aabb.lowerBound - r;
-	nodes[proxyId].aabb.upperBound = aabb.upperBound + r;
+	nodes[proxyId].Expand(-r, r);
+	/*nodes[proxyId].aabb.lowerBound = aabb.lowerBound - r;
+	nodes[proxyId].aabb.upperBound = aabb.upperBound + r;*/
+	
 	nodes[proxyId].userData = userData;
 	nodes[proxyId].height = 0;
 
@@ -111,11 +113,13 @@ bool DynamicAABBTree<T>::MoveProxy(int proxyId, const AABB& aabb, const Vector2&
 
 	RemoveLeaf(proxyId);
 
-	// Extend AABB.
+	// Fatten AABB.
 	AABB b = aabb;
 	Vector2 r(aabb_extension, aabb_extension);
-	b.lowerBound = b.lowerBound - r;
-	b.upperBound = b.upperBound + r;
+	
+	b.Expand(-r, r);
+	/*b.lowerBound = b.lowerBound - r;
+	b.upperBound = b.upperBound + r;*/
 
 	// Predict AABB displacement.
 	Vector2 d = aabb_multiplier * displacement;
@@ -368,7 +372,7 @@ void DynamicAABBTree<T>::RemoveLeaf(int leaf)
 	}
 }
 
-//If this is confusing its just AVL tree rotations in a single function
+// If this is confusing its just tree rotations in a single function
 template<typename T>
 int DynamicAABBTree<T>::Balance(int iA)
 {
@@ -500,6 +504,6 @@ int DynamicAABBTree<T>::Balance(int iA)
 		return iB;
 	}
 
-	//If we get here A is balanced so we just return it
+	// If we get here A is balanced so we just return it
 	return iA;
 }

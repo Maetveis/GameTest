@@ -15,6 +15,11 @@ public:
 	
 	Vector2 GetCenter() const;
 	Vector2 GetExtents() const;
+	Vector2 GetSides() const;
+	
+	void Move(const Vector2& diff);
+	void SetPos(const Vector2& pos);
+	void Expand(const Vector2& lower, const Vector2& upper);
 	
 	double GetPerimeter() const;
 	double GetArea() const;

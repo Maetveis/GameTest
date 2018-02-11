@@ -13,6 +13,8 @@ public:
 	
 	friend Vector2 cross(const Vector2& lhs, const Vector2& rhs);
 	
+	friend Vector2 operator-(const Vector2& operand);
+	
 	friend Vector2& operator+=(Vector2& lhs, const Vector2& rhs);
 	friend Vector2& operator-=(Vector2& lhs, const Vector2& rhs);
 	friend Vector2 operator+(const Vector2& lhs, const Vector2& rhs);

@@ -9,6 +9,11 @@ inline double Vector2::LengthSquared() const
 	return x * x + y * y;
 }
 
+inline Vector2 operator-(const Vector2& operand)
+{
+	return -1 * operand;
+}
+
 inline Vector2& operator+=(Vector2& lhs, const Vector2& rhs)
 {
 	lhs.x += rhs.x;
