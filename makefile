@@ -9,7 +9,7 @@ LDLIBS=-lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 
 RM=rm
 RMDIR=rm -r
-MKDIR=mkdir -p
+MKDIR=mkdir
 
 OUT=bin/main.exe
 
@@ -33,7 +33,7 @@ $(OUT) : $(OBJS)
 	$(CXX) $^ $(LDFLAGS) -L$(LIBDIR) $(LDLIBS) -o $(OUT)
 	
 $(BUILD_DIRS):
-	$(MKDIR) $@
+	$(MKDIR) "$@"
 	
 clean :
 	$(RM) "$(OUT)"
