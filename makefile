@@ -1,4 +1,4 @@
-CXX=g++
+CXX=gcc
 CXXFLAGS=-Wall -O0 -g -std=c++14 -MMD -MP
 SRCDIR=src
 OBJDIR=build/obj
