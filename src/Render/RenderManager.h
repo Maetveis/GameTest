@@ -2,12 +2,13 @@
 #define RENDER_MANAGER_H
 
 #include <vector>
+#include <SDL2/SDL.h>
+
+#include <glm/glm.hpp>
 
 #include "../Main/GameComponent.h"
-#include "Sprite.h"
-#include "DynamicAABBTree.h"
+#include "ShaderProgram.h"
 
-struct SDL_Renderer;
 struct SDL_Window;
 
 class RenderManager :
@@ -16,22 +17,44 @@ class RenderManager :
 public:
 	RenderManager() = default;
 
-	void Init();
+	bool Init();
+	
+	void Update(double delta);
 	
 	void Render();
 	
-	Sprite* GetFile(const char* filename);
+	void Destroy();
 	
-	//bool QueryCallback(const int node) const;
+	void OnWindow(SDL_WindowEvent& event);
 protected:
 private:
-	//SpriteLoader loader;
-	//DynamicAABBTree<int> tree;
+	struct Vertex
+	{
+		glm::vec3 pos;
+		glm::vec3 color;
+	};
 	
-	std::vector<Sprite> sprites;
-	
-	SDL_Renderer* renderer;
+	bool LoadData();
+	bool LoadShaders();
+
 	SDL_Window* mainWindow;
+	SDL_GLContext oContext;
+	
+	GLuint vaoID;
+	GLuint vboID;
+	
+	GLuint worldLoc;
+	GLuint viewLoc;
+	GLuint projLoc;
+	GLuint timeLoc;
+	
+	glm::mat4 matWorld;
+	glm::mat4 matView;
+	glm::mat4 matProj;
+	
+	float time;
+	
+	ShaderProgram mainProgram;
 };
 
 #endif //RENDER_MANAGER_H

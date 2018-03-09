@@ -3,7 +3,7 @@
 
 #include "../Main/GameComponent.h"
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 class EventListener :
 	public GameComponent
@@ -44,8 +44,6 @@ public:
  	// virtual void OnTextInput(SDL_TextInputEvent&){}
 	
 	virtual void OnUser(SDL_UserEvent&){}
-	
-	virtual void OnWindow(SDL_WindowEvent&){}
 protected:
 private:
 };

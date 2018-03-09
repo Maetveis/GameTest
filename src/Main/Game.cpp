@@ -1,11 +1,12 @@
 #include "Game.h"
 
-#include "../BallScene.h"
+#include "../InGameScene.h"
 
-#include <SDL.h>
-
-#include <cstdint>
+#include <SDL2/SDL.h>
 #include <iostream>
+
+// #include <cstdint>
+// #include <iostream>
 
 Game::Game() :
 	running(true)
@@ -14,33 +15,42 @@ Game::Game() :
 
 void Game::Run()
 {
-	//Main loop
-	Init();
-	while(running)
+	// If something fails at init we quit
+	if(Init())
 	{
-		HandleEvents();
-		Update();
-		Render();
-		DelayFrameTime(timer.GetFrameStart(), targetFPS);
+		//Main loop
+		while(running)
+		{
+			HandleEvents();
+			Update();
+			Render();
+			//DelayFrameTime(timer.GetFrameStart(), targetFPS);
+		}
 	}
 	Destroy();
 }
 
-void Game::Init()
+bool Game::Init()
 {
 	//Initializing SDL
-	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	if(SDL_Init(SDL_INIT_EVENTS) < 0)
+	{
+		std::cerr << "Couldn't initialize SDL: " << SDL_GetError() << std::endl;
+		return false;
+	}
 	
 	//Initializing RenderManager
-	manager.Init();
+	if(!manager.Init()) return false;
 	
 	//Starting main Scene
 	sceneManager.AttachGame(this);
-	sceneManager.ChangeScene(std::make_unique<BallScene>());
+	sceneManager.ChangeScene(std::make_unique<InGameScene>());
 	
 	//Starting delta timer
 	timer.SetScaleFactor(1);
 	timer.Start();
+	
+	return true;
 }
 
 void Game::HandleEvents()
@@ -116,7 +126,7 @@ void Game::HandleEvents()
 				sceneManager.currentScene()->OnUser(event.user);
 				break;
 			case SDL_WINDOWEVENT:
-				sceneManager.currentScene()->OnWindow(event.window);
+				manager.OnWindow(event.window);
 				break;
 			default:
 				break;
@@ -128,6 +138,7 @@ void Game::Update()
 {
 	timer.Update();
 	sceneManager.currentScene()->Update(timer.GetScaledTime());
+	manager.Update(timer.GetScaledTime());
 }
 
 void Game::Render()
@@ -148,5 +159,6 @@ void Game::DelayFrameTime(const unsigned frameStart, const unsigned short target
 
 void Game::Destroy()
 {
+	manager.Destroy();
 	SDL_Quit();
 }

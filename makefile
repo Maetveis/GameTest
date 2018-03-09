@@ -1,22 +1,21 @@
-CXX=gcc
+CXX=g++
 CXXFLAGS=-Wall -O0 -g -std=c++14 -MMD -MP
 SRCDIR=src
 OBJDIR=build/obj
-INCL=include/SDL2
+INCL=include
 LIBDIR=lib
 LDFLAGS=-g
-LDLIBS=-lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
+LDLIBS=-mwindows -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lglew32 -lopengl32
 
 RM=rm
 RMDIR=rm -r
-MKDIR=mkdir
+MKDIR=mkdir -p
 
 OUT=bin/main.exe
 
 SRCS=Main/main.cpp Main/Game.cpp Main/ScaledDeltaTimer.cpp \
 	Scene/SceneManager.cpp \
-	Render/RenderManager.cpp Render/AABB.cpp Render/Camera.cpp \
-	Ball.cpp
+	Render/RenderManager.cpp Render/ShaderProgram.cpp
 
 OBJNAMES := $(SRCS:.cpp=.o)
 OBJS := $(addprefix $(OBJDIR)/,$(OBJNAMES))

@@ -16,7 +16,7 @@ public:
 	RenderManager manager;
 protected:
 private:
-	void Init();
+	bool Init();
 	void HandleEvents();
 	void Update();
 	void Render();
