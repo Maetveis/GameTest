@@ -18,7 +18,7 @@ void RenderManager::Render()
 	mainProgram.Use();
 	
 	// Where is the camera, where it is pointing, what direction is upward
-	matView = glm::lookAt(glm::vec3( 2,  3,  5), glm::vec3( 0,  0,  0), glm::vec3( 0,  1,  0));	
+	matView = glm::lookAt(glm::vec3( 0.f,  0.f,  4.f), glm::vec3( 0,  0,  0), glm::vec3( 0,  1,  0));	
 
 	glUniformMatrix4fv(worldLoc, 1, GL_FALSE, &(matWorld[0][0]));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &(matView[0][0]));
@@ -27,8 +27,10 @@ void RenderManager::Render()
 	
 	glBindVertexArray(vaoID);
 	
-	matWorld = glm::mat4(1.0f);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	matWorld = glm::rotate(time * 0.2f, glm::vec3(0.f, 0.f, 1.f)) * glm::rotate(time * 0.5f, glm::vec3(0.f, 1.f, 0.f)) * glm::rotate(time, glm::vec3(1.f, 0.f, 0.f));
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 10);
+	glDrawArrays(GL_TRIANGLE_STRIP, 10, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 14, 4);
 	
 	// matWorld = glm::rotate()
 	
@@ -66,12 +68,12 @@ bool RenderManager::Init()
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	
 	// Anti-aliasing
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+	// SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+	// SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 	
 	//Spawning Main Window
 	Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
-	mainWindow = SDL_CreateWindow("GameTest", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, flags);
+	mainWindow = SDL_CreateWindow("GameTest", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 360, flags);
 	if(mainWindow == nullptr)
 	{
 		std::cerr << "Couldn't create window: " << SDL_GetError() << std::endl;
@@ -102,17 +104,17 @@ bool RenderManager::Init()
 	glEnable(GL_DEPTH_TEST);
 	glCullFace(GL_BACK);
 	
-	glEnable (GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	//glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	glEnable( GL_POINT_SMOOTH );
-	glPointSize( 10 );
+	//glEnable( GL_POINT_SMOOTH );
+	//glPointSize( 10 );
 	
 	if(!LoadData()) return false;
 	
 	if(!LoadShaders()) return false;
 	
-	matProj = glm::perspective(45.0f, 640/480.0f, 1.0f, 1000.0f);
+	matProj = glm::perspective(45.0f, 640/360.0f, 0.01f, 100.0f);
 	
 	std::cout << "So far so good" << std::endl;
 	
@@ -123,12 +125,35 @@ bool RenderManager::LoadData()
 {
 	Vertex vert[] =
 	{ 
-		// Side faces
-		{glm::vec3(-1, 1, 0), glm::vec3(0,0,1)},
-		{glm::vec3(-1, -1, 0), glm::vec3(0,1,0)},
-		{glm::vec3(1, 1, 0), glm::vec3(1,0,0)},
-		{glm::vec3(1, -1, 0), glm::vec3(0,0,1)}
-	
+		// Front face
+		{glm::vec3(-1, 1, 1), glm::vec3(1, 0, 0)},
+		{glm::vec3(-1, -1, 1), glm::vec3(0, 1, 0)},
+		{glm::vec3(1, 1, 1), glm::vec3(0, 0, 1)},
+		{glm::vec3(1, -1, 1), glm::vec3(1, 1, 1)},
+		
+		// Right face
+		{glm::vec3(1, 1, -1), glm::vec3(1, 0, 0)},
+		{glm::vec3(1, -1, -1), glm::vec3(0, 1, 0)},
+		
+		// Back face
+		{glm::vec3(-1, 1, -1), glm::vec3(0, 0, 1)},
+		{glm::vec3(-1, -1, -1), glm::vec3(1, 1, 1)},
+		
+		// Left face
+		{glm::vec3(-1, 1, 1), glm::vec3(1, 0, 0)},
+		{glm::vec3(-1, -1, 1), glm::vec3(0, 1, 0)},
+		
+		// Top face
+		{glm::vec3(-1, 1, -1), glm::vec3(0, 0, 1)},
+		{glm::vec3(-1, 1, 1), glm::vec3(1, 0, 0)},
+		{glm::vec3(1, 1, -1), glm::vec3(1, 0, 0)},
+		{glm::vec3(1, 1, 1), glm::vec3(0, 0, 1)},
+		
+		// Bottom face
+		{glm::vec3(-1, -1, 1), glm::vec3(0, 1, 0)},
+		{glm::vec3(-1, -1, -1), glm::vec3(1, 1, 1)},
+		{glm::vec3(1, -1, 1), glm::vec3(1, 1, 1)},
+		{glm::vec3(1, -1, -1), glm::vec3(0, 1, 0)}
 	};
 	
 	// Generate 1 VAO
@@ -181,7 +206,7 @@ bool RenderManager::LoadShaders()
 
 void RenderManager::Update(double delta)
 {
-	time = SDL_GetTicks() / 1000.;
+	time = SDL_GetTicks() / 300.0f;
 	
 }
 
@@ -197,7 +222,7 @@ void RenderManager::OnWindow(SDL_WindowEvent& event)
 	{
 		case SDL_WINDOWEVENT_RESIZED:
 			glViewport(0, 0, event.data1, event.data2);
-			matProj = glm::perspective(45.0f, event.data1 / static_cast<float>(event.data2), 1.0f, 1000.0f);
+			matProj = glm::perspective(45.0f, event.data1 / static_cast<float>(event.data2), 0.01f, 100.0f);
 		default:
 			break;
 	}
